@@ -177,8 +177,6 @@ const AdminPage = props => {
                     { label: "Xbox One",  y: gamePlatformsMap["Xbox One"] || null  },
                     { label: "PC",  y: gamePlatformsMap["PC"] || null  },
                     { label: "Nintendo Switch",  y: gamePlatformsMap["Nintendo Switch"] || null  },
-                    { label: "Linux",  y: gamePlatformsMap["Linux"] || null  },
-                    { label: "macOS",  y: gamePlatformsMap["macOS"] || null  },
                     { label: "Android",  y: gamePlatformsMap["Android"] || null  },
                     { label: "PlayStation 3",  y: gamePlatformsMap["PlayStation 3"] || null  },
                     { label: "Xbox 360",  y: gamePlatformsMap["Xbox 360"] || null  },
