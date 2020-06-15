@@ -11,7 +11,9 @@ const ToggleFavoriteButton = props => {
         gameId: props.gameId,
         gameTitle: props.gameInfo.name,
         gameImage: props.gameInfo.background_image,
-        gameReleaseDate: props.gameInfo.released
+        gameReleaseDate: props.gameInfo.released,
+        gameGenre: props.gameInfo.genres,
+        preferedPlatform: props.gameInfo.platforms
     }
     
     useEffect(() => {

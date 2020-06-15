@@ -13,6 +13,7 @@ const AdminPage = props => {
   const [currentKey, setCurrentKey] = useState(1);
   const [Users, setUsers] = useState([]);
   const [FavoriteMovies, setFavoriteMovies] = useState([]);
+  const [FavoriteGames, setFavoriteGames] = useState([]);
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -25,7 +26,19 @@ const AdminPage = props => {
   useEffect(() => {
       fetchUsers();
       fetchFavoriteMovies();
+      fetchFavoriteGames();
   }, [])
+
+  const fetchFavoriteGames = () => {
+    axios.post('http://localhost:3000/api/users/getFavoriteGame')
+        .then(response => {
+            if(response.data.success){
+                setFavoriteGames(response.data.favorites);
+            }else {
+                alert('Failed to get favorite games');
+            }
+        })
+  }
 
   const fetchFavoriteMovies = () => {
     axios.post('http://localhost:3000/api/users/getFavoriteMovie')
@@ -65,6 +78,8 @@ const AdminPage = props => {
   let genres = [];
   let genresMap = {};
   let movieOptions = null;
+  let gameGenresOptions = null;
+  let gamePlatformsOptions = null;
   FavoriteMovies.map(genre => genres.push(genre.movieGenre));
   if(genres.length != 0) {
     for (let i = 0; i < genres.length; i++) {
@@ -96,6 +111,77 @@ const AdminPage = props => {
                     { label: "Мистерия",  y: genresMap["Мистерия"] || null  },
                     { label: "Документален",  y: genresMap["Документален"] || null  },
                     { label: "Уестърн",  y: genresMap["Уестърн"] || null  }
+                ]
+       }],
+       backgroundColor: null,
+       exportEnabled: true,
+       exportFileName: "Range Spline Area",
+   }
+  }
+
+  let gameGenres = [];
+  let gameGenresMap = [];
+  FavoriteGames.map(game => game.gameGenre.map(genre => gameGenres.push(genre.name)));
+  if(gameGenres.length != 0) {
+    for (let i = 0; i < gameGenres.length; i++) {
+      let item = gameGenres[i];
+      gameGenresMap[item] = (gameGenresMap[item] + 1) || 1;
+    }
+    
+    gameGenresOptions = {
+      title: {
+        text: "Предпочитани жанрове"
+      },
+      data: [{				
+                type: "column",
+                dataPoints: [
+                    { label: "Action",  y: gameGenresMap["Action"] || null  },
+                    { label: "Adventure", y: gameGenresMap["Adventure"] || null  },
+                    { label: "RPG", y: gameGenresMap["RPG"] || null  },
+                    { label: "Shooter",  y: gameGenresMap["Shooter"] || null  },
+                    { label: "Strategy",  y: gameGenresMap["Strategy"] || null  },
+                    { label: "Indie",  y: gameGenresMap["Indie"] || null  },
+                    { label: "Simulation",  y: gameGenresMap["Simulation"] || null  },
+                    { label: "Sports",  y: gameGenresMap["Sports"] || null  },
+                    { label: "Racing",  y: gameGenresMap["Racing"] || null  },
+                    { label: "Casual",  y: gameGenresMap["Casual"] || null  },
+                    { label: "Massively Multiplayer",  y: gameGenresMap["Massively Multiplayer"] || null  },
+                ]
+       }],
+       backgroundColor: null,
+       exportEnabled: true,
+       exportFileName: "Range Spline Area",
+   }
+  }
+
+  let gamePlatforms = [];
+  let gamePlatformsMap = [];
+  FavoriteGames.map(game => game.preferedPlatform.map(platform => gamePlatforms.push(platform.platform.name)));
+
+  if(gamePlatforms.length != 0) {
+    for (let i = 0; i < gamePlatforms.length; i++) {
+      let item = gamePlatforms[i];
+      gamePlatformsMap[item] = (gamePlatformsMap[item] + 1) || 1;
+    }
+    
+    gamePlatformsOptions = {
+      title: {
+        text: "Предпочитани платформи"
+      },
+      data: [{				
+                type: "column",
+                dataPoints: [
+                    { label: "PlayStation 4",  y: gamePlatformsMap["PlayStation 4"] || null  },
+                    { label: "PlayStation 5", y: gamePlatformsMap["PlayStation 5"] || null  },
+                    { label: "Xbox Series X", y: gamePlatformsMap["Xbox Series X"] || null  },
+                    { label: "Xbox One",  y: gamePlatformsMap["Xbox One"] || null  },
+                    { label: "PC",  y: gamePlatformsMap["PC"] || null  },
+                    { label: "Nintendo Switch",  y: gamePlatformsMap["Nintendo Switch"] || null  },
+                    { label: "Linux",  y: gamePlatformsMap["Linux"] || null  },
+                    { label: "macOS",  y: gamePlatformsMap["macOS"] || null  },
+                    { label: "Android",  y: gamePlatformsMap["Android"] || null  },
+                    { label: "PlayStation 3",  y: gamePlatformsMap["PlayStation 3"] || null  },
+                    { label: "Xbox 360",  y: gamePlatformsMap["Xbox 360"] || null  },
                 ]
        }],
        backgroundColor: null,
@@ -200,7 +286,19 @@ const AdminPage = props => {
       content = (<h1>Съобщения</h1>);
     }
     else if(currentKey == 3) {
-      content = (<h1>Игри</h1>);
+      content = (
+        <div>
+          {gameGenresOptions && <CanvasJSChart options = {gameGenresOptions}
+            /* onRef = {ref => this.chart = ref} */
+          />}
+          <br />
+          <hr />
+          <br />
+          {gamePlatformsOptions && <CanvasJSChart options = {gamePlatformsOptions}
+            /* onRef = {ref => this.chart = ref} */
+          />}
+        </div>
+      );
     }
     else if(currentKey == 2) {
       content = (
@@ -249,7 +347,7 @@ const AdminPage = props => {
             </SubMenu>
           </Menu>
         </Sider>
-        <Layout>
+        <Layout style={{overflowX: 'unset'}}>
           <Content style={{ margin: '50px 16px 0 16px' }}>
             {content}
           </Content>

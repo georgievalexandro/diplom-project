@@ -17,6 +17,12 @@ const favoriteGameSchema = mongoose.Schema({
     },
     gameReleaseDate: {
         type: String
+    },
+    gameGenre: {
+        type: Array
+    },
+    preferedPlatform: {
+        type: Array
     }
 })
 

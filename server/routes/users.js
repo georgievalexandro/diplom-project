@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User } = require("../models/User");
 const { Favorite } = require("../models/Favorite");
+const { FavoriteGame } = require("../models/FavoriteGame");
 
 const { auth } = require("../middleware/auth");
 
@@ -21,6 +22,14 @@ router.get("/auth", auth, (req, res) => {
         role: req.user.role,
         image: req.user.image,
     });
+});
+
+router.post("/getFavoriteGame", (req, res) => {
+    FavoriteGame.find()
+        .exec((err, favorites) => {
+            if(err) return res.status(400).send(err)
+            return res.status(200).json({success: true, favorites})
+        })
 });
 
 router.post("/getFavoriteMovie", (req, res) => {
