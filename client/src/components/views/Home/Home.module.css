@@ -1,0 +1,91 @@
+.HomepageTitle {
+    font : normal 600 40px/1 'Josefin Sans', sans-serif;
+    color: #fff;
+}
+.Section {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+.Section video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.SectionCaptions {
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.ScrollLink {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    z-index: 2;
+    display: inline-block;
+    transform: translate(0, -50%);
+    color: #fff;
+    font : normal 400 20px/1 'Josefin Sans', sans-serif;
+    letter-spacing: .1em;
+    text-decoration: none;
+    transition: opacity .3s;
+}
+.ScrollLink:hover {
+    opacity: .5;
+}
+.ScrollLink span {
+    position: absolute;
+    top: -70px;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    border-left: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    transform: rotate(-45deg);
+    animation: sdb07 2s infinite;
+    opacity: 0;
+    box-sizing: border-box;
+}
+.ScrollLink span:nth-of-type(1) {
+    animation-delay: 0s;
+}
+.ScrollLink span:nth-of-type(2) {
+    top: -54px;
+    animation-delay: .15s;
+}
+.ScrollLink span:nth-of-type(3) {
+    top: -38px;
+    animation-delay: .3s;
+}
+.SectionThree {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px 20px;
+}
+@-webkit-keyframes sdb07 {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes sdb07 {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }

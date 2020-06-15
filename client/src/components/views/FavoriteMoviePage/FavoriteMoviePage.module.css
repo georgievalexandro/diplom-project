@@ -1,0 +1,12 @@
+.RemoveButton {
+    width: 100%;
+    border: none;
+    height: 40px;
+    background: #ac1212;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+}
+.RemoveButton:hover {
+    background: #e62525;
+}
