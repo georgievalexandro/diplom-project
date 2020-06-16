@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import classes from './Home.module.css';
 import gameVideo from '../../../assets/videos/game.mp4';
 import movieVideo from '../../../assets/videos/movie.mp4';
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Button, Select } from 'antd';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { useSelector } from "react-redux";
+import { Formik } from 'formik';
 
 const { Option } = Select;
 
 const Home = props => {
     const user = useSelector(state => state.user);
     const [SelectState, setSelectState] = useState(null);
+    const [OpinionData, setOpinionData] = useState(null);
     
     if(user.userData && user.userData.isAuth) {
         console.log('Is logged in');
@@ -18,9 +20,75 @@ const Home = props => {
         console.log('Not logged in');
     }
 
-    let form = 'dd';
+    let form = null;
     if(SelectState === 'opinion') {
-        form = (<h3>Форма за споделяне на мнение</h3>);
+        form = (
+            <div className={classes.OpinionFormContainer}>
+        	    <h1>Споделете мнението си с нас</h1>
+                <Formik
+                    initialValues={{ firstname: '', lastname: '', email: '' }}
+                    validate={values => {
+                        const errors = {};
+                        if (!values.email) {
+                            errors.email = 'Required';
+                        } else if (
+                            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                        ) {
+                            errors.email = 'Invalid email address';
+                        }
+
+                        return errors;
+                    }}
+
+                    
+                    onSubmit={(values, { setSubmitting }) => {
+                            setOpinionData(values);
+                            setSubmitting(false);
+                    }}
+                >
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleChange,
+                        handleBlur,
+                        handleSubmit,
+                        isSubmitting,
+                        /* and other goodies */
+                    }) => (
+                        <form className={classes.OpinionForm} onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                name="firstname"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.firstname}
+                            />
+                            {errors.firstname && touched.firstname && errors.firstname}
+                            <input
+                                type="text"
+                                name="lastname"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.lastname}
+                            />
+                            {errors.lastname && touched.lastname && errors.lastname}
+                            <input
+                                type="email"
+                                name="email"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.email}
+                            />
+                            {errors.email && touched.email && errors.email}
+                            <button type="submit" disabled={isSubmitting}>
+                                Изпрати
+                            </button>
+                        </form>
+                    )}
+                </Formik>
+            </div>
+        );
     }else if(SelectState === 'deleteAccount') {
         form = (<h3>Изтриване на акаунт</h3>);
     }

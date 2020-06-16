@@ -70,6 +70,13 @@
 .SelectSize {
   width: 360px !important;
 }
+.OpinionFormContainer {
+  margin: 30px 0;
+}
+.OpinionForm {
+  display: flex;
+  flex-direction: column;
+}
 @-webkit-keyframes sdb07 {
     0% {
       opacity: 0;
