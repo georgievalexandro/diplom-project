@@ -1,33 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Home.module.css';
 import gameVideo from '../../../assets/videos/game.mp4';
 import movieVideo from '../../../assets/videos/movie.mp4';
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, Select } from 'antd';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
+import { useSelector } from "react-redux";
 
+const { Option } = Select;
 
-// const layout = {
-//     labelCol: { span: 8 },
-//     wrapperCol: { span: 16 },
-// };
+const Home = props => {
+    const user = useSelector(state => state.user);
+    const [SelectState, setSelectState] = useState(null);
+    
+    if(user.userData && user.userData.isAuth) {
+        console.log('Is logged in');
+    } else {
+        console.log('Not logged in');
+    }
 
+    let form = 'dd';
+    if(SelectState === 'opinion') {
+        form = (<h3>Форма за споделяне на мнение</h3>);
+    }else if(SelectState === 'deleteAccount') {
+        form = (<h3>Изтриване на акаунт</h3>);
+    }
 
-// const validateMessages = {
-//     required: '${label} is required!',
-//     types: {
-//       email: '${label} is not validate email!',
-//       number: '${label} is not a validate number!',
-//     },
-//     number: {
-//       range: '${label} must be between ${min} and ${max}',
-//     },
-// };
-
-
-const home = props => {
-    // const onFinish = values => {
-    //     console.log(values);
-    // };
+    function onChange(value) {
+        setSelectState(value);
+    }  
     
     return (
         <>
@@ -72,27 +72,25 @@ const home = props => {
                 </AnchorLink>
             </div>
             <div className={[classes.Section, classes.SectionThree].join(' ')} id='sectionThree'>
-                <h3 style={{ textAlign: 'center', fontSize: '25px', fontWeight: '600'}}>Споделете вашето мнение, или предложение за развитието на сайта.</h3>
-
-                <Form style={{ width: '20rem' }} name="nest-messages">
-                    <Form.Item name={['user', 'name']} label="Име" rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['user', 'email']} label="Имейл" rules={[{ type: 'email' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name={['user', 'introduction']} label="Описание">
-                        <Input.TextArea />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button block type="primary" htmlType="submit">
-                            Изпрати
-                        </Button>
-                    </Form.Item>
-                </Form>
+                <h3 style={{ textAlign: 'center', fontSize: '25px', fontWeight: '600'}}>Свържете се с нас</h3>
+                <Select
+                    className={classes.SelectSize}
+                    allowClear
+                    showSearch
+                    size='large'
+                    style={{ width: 200 }}
+                    placeholder="Избери типа на съобщението"
+                    optionFilterProp="children"
+                    onChange={onChange}
+                >
+                    <Option value="opinion">Сподели мнение</Option>
+                    <Option value="deleteAccount" disabled={!(user.userData && user.userData.isAuth)}>Поискай изтриване на акаунт</Option>
+                </Select>
+                
+                {form}
             </div>
         </>
     )
 }
 
-export default home;
+export default Home;

@@ -67,6 +67,9 @@
   flex-direction: column;
   padding: 30px 20px;
 }
+.SelectSize {
+  width: 360px !important;
+}
 @-webkit-keyframes sdb07 {
     0% {
       opacity: 0;
