@@ -7,29 +7,34 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { useSelector } from "react-redux";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import { USER_SERVER } from '../../Config';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const SignupSchema = Yup.object().shape({
+const OpinionSchema = Yup.object().shape({
     firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+      .min(2, '*Въведете поне 2 символа')
+      .max(20, '*Името е прекалено дълго')
+      .required('*Моля въведете име'),
     lastName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+      .min(2, '*Въведете поне 2 символа')
+      .max(20, '*Фамилията е прекалено дълга')
+      .required('*Моля въведете фамилия'),
     email: Yup.string()
-      .email('Invalid email')
-      .required('Required'),
+      .email('*Моля въведете валиден имейл адрес')
+      .required('*Моля въведете имейл'),
   });
 
 const Home = props => {
     const user = useSelector(state => state.user);
     const [SelectState, setSelectState] = useState(null);
     const [OpinionData, setOpinionData] = useState(null);
-    
+    const [DeleteAccountMessage, setDeleteAccountMessage] = useState(null);
+    const userId = localStorage.getItem('userId');
+
+
     if(user.userData && user.userData.isAuth) {
         console.log('Is logged in');
     } else {
@@ -48,44 +53,95 @@ const Home = props => {
                         email: '',
                         message: ''
                     }}
-                    validationSchema={SignupSchema}
+                    validationSchema={OpinionSchema}
                     onSubmit={values => {
                         // same shape as initial values
                         setOpinionData(values);
+                        const variable = {
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            email: values.email,
+                            message: values.message
+                        }
+                        axios.post('http://localhost:3000/api/useropinion/addOpinion', variable)
+                        .then(response => {
+                            console.log('Mail was sent');
+                        })
                     }}
                 >
                     {({ errors, touched }) => (
                         <Form className={classes.OpinionForm}>
-                            <Field name="firstName" />
+                            <Field name="firstName" className={classes.CustomInput} placeholder="Име"/>
                             {errors.firstName && touched.firstName ? (
-                                <div>{errors.firstName}</div>
+                                <div style={{color: '#d74747', fontWeight: '500'}}>{errors.firstName}</div>
                             ) : null}
 
-                            <Field name="lastName" />
+                            <Field name="lastName" className={classes.CustomInput} placeholder="Фамилия"/>
                             {errors.lastName && touched.lastName ? (
-                                <div>{errors.lastName}</div>
+                                <div style={{color: '#d74747', fontWeight: '500'}}>{errors.lastName}</div>
                             ) : null}
 
-                            <Field name="email" type="email" />
-                            {errors.email && touched.email ? <div>{errors.email}</div> : null}
+                            <Field name="email" type="email" className={classes.CustomInput} placeholder="Имейл"/>
+                            {errors.email && touched.email ? <div style={{color: '#d74747', fontWeight: '500'}}>{errors.email}</div> : null}
 
-                            <Field name="message" as='textarea' />
-                            {errors.message && touched.message ? <div>{errors.message}</div> : null}
+                            <Field name="message" component="textarea" className={classes.CustomTextarea} placeholder="Споделете с нас"/>
                             
-                            <button type="submit">Submit</button>
+                            <button type="submit" className={classes.CustomSubmitButton}>Изпрати</button>
                         </Form>
                     )}
                 </Formik>
             </div>
         );
     }else if(SelectState === 'deleteAccount') {
-        form = (<h3>Изтриване на акаунт</h3>);
+        form = (
+            <div className={classes.DeleteAccountFormContainer}>
+        	    <h1 style={{margin: '30px 0 0 0'}}>Съжаляваме че ни напускате :(</h1>
+                <Formik
+                    initialValues={{
+                        message: ''
+                    }}
+                    onSubmit={values => {
+                        setDeleteAccountMessage(values.message);
+                        const variable = {
+                            userEmail: user.userData.email,
+                            userMessage: values.message || 'Няма съобщение'
+                        }
+                        // same shape as initial values
+                        
+                        axios.post('http://localhost:3000/api/sendmail/sendNotification', variable)
+                        .then(response => {
+                            console.log('Mail was sent');
+                        })
+                        // axios.post('http://localhost:3000/api/users/deleteAccount', {userId})
+                        // .then(response => {
+                        //     if(response.data.success){
+                        //         axios.get(`${USER_SERVER}/logout`).then(response => {
+                        //             if (response.status === 200) {
+                        //               props.history.push("/login");
+                        //             } else {
+                        //               alert('Log Out Failed')
+                        //             }
+                        //         });
+                        //     }else {
+                        //         alert('Failed to delete account');
+                        //     }
+                        // })
+                    }}
+                >
+                    {({ errors, touched }) => (
+                        <Form className={classes.OpinionForm}>
+                            <Field name="message" component="textarea" className={classes.CustomTextarea} placeholder="Споделете защо избирате да изтриете акаунта си"/>
+                            <button type="submit" className={classes.CustomSubmitButton}>Изтрий акаунт</button>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+        );
     }
 
     function onChange(value) {
         setSelectState(value);
     } 
-    console.log(OpinionData);
     
     return (
         <>

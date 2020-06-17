@@ -33,6 +33,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use('/api/useropinion', require('./routes/useropinion'));
+app.use('/api/sendmail', require('./routes/sendmail'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/favorite', require('./routes/favorite'));
 app.use('/api/favoritegame', require('./routes/favoritegame'));

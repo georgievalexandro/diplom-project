@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Layout, Menu, Icon, Table, Tag, Button } from 'antd';
+import { Layout, Menu, Icon, Table, Tag, Button, Collapse  } from 'antd';
 import CanvasJSReact from '../../../lib/canvasjs.react';
 
 const CanvasJS = CanvasJSReact.CanvasJS;
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const { Content, Sider } = Layout;
 const { SubMenu } = Menu;
+const { Panel } = Collapse;
 
 const AdminPage = props => {
   const [collapsed, setCollapsed] = useState(false);
@@ -14,6 +15,7 @@ const AdminPage = props => {
   const [Users, setUsers] = useState([]);
   const [FavoriteMovies, setFavoriteMovies] = useState([]);
   const [FavoriteGames, setFavoriteGames] = useState([]);
+  const [UserOpinions, setUserOpinions] = useState([]);
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -27,7 +29,19 @@ const AdminPage = props => {
       fetchUsers();
       fetchFavoriteMovies();
       fetchFavoriteGames();
+      fetchOpinions();
   }, [])
+
+  const fetchOpinions = () => {
+    axios.post('http://localhost:3000/api/useropinion/getOpinions')
+        .then(response => {
+            if(response.data.success){
+                setUserOpinions(response.data.opinions)
+            }else {
+                alert('Failed to get favorite games');
+            }
+        })
+  }
 
   const fetchFavoriteGames = () => {
     axios.post('http://localhost:3000/api/users/getFavoriteGame')
@@ -45,7 +59,6 @@ const AdminPage = props => {
         .then(response => {
             if(response.data.success){
                 setFavoriteMovies(response.data.favorites)
-                console.log(response.data.favorites);
             }else {
                 console.log('Failed to get favorite movies');
             }
@@ -273,12 +286,26 @@ const AdminPage = props => {
           })
   }
 
-  
+  const responseHandler = (email) => {
+    console.log(email);
+  }
 
     let content = '';
 
     if(currentKey == 5) {
-      content = (<h1>Мнения</h1>);
+      content = (
+        <Collapse >
+          {UserOpinions && UserOpinions.map((opinion, index) => {
+            return <Panel header={[opinion.firstName, ' ', opinion.lastName, ' ', <Tag color="green">{opinion.email}</Tag>]} key={opinion._id}>
+                <p>{opinion.message}</p>
+                <form>
+                  <textarea name='response'> </textarea>
+                </form>
+                <button type='primary' onClick={()=>responseHandler(opinion.email)} >Отговори</button>
+              </Panel>
+          })}
+        </Collapse>
+      );
     }
     else if(currentKey == 4) {
       content = (<h1>Съобщения</h1>);
