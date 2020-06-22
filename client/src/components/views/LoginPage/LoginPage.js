@@ -85,7 +85,7 @@ function LoginPage(props) {
               borderRadius: '5px',
               padding: '20px'
             }}>
-              <Title level={2} style={{textAlign: 'center'}}>Вход</Title>
+              <Title level={2} style={{textAlign: 'center', color: '#709abf'}}>Вход</Title>
               <form onSubmit={handleSubmit} style={{ width: '350px' }}>
 
                 <Form.Item required>
@@ -129,16 +129,16 @@ function LoginPage(props) {
                 )}
 
                 <Form.Item>
-                  <Checkbox id="rememberMe" onChange={handleRememberMe} checked={rememberMe} >Запомни ме</Checkbox>
-                  <a className="login-form-forgot" href="/reset_user" style={{ float: 'right' }}>
+                  <Checkbox id="rememberMe" onChange={handleRememberMe} checked={rememberMe} style={{color: '#709abf'}}>Запомни ме</Checkbox>
+                  <a className="login-form-forgot" href="/reset_user" style={{ float: 'right', color: '#709abf' }}>
                     Забравена парола
                     </a>
                   <div>
-                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ minWidth: '100%' }} disabled={isSubmitting} onSubmit={handleSubmit}>
+                    <Button type="primary" htmlType="submit" className="login-form-button" style={{ minWidth: '100%', background: '#709abf', borderColor: '#709abf' }} disabled={isSubmitting} onSubmit={handleSubmit}>
                       Изпрати
                   </Button>
                   </div>
-                  Нямате акаунт? <a href="/register">Регистрация!</a>
+                  <span style={{color: '#709abf'}}>Нямате акаунт?</span> <a href="/register">Регистрация!</a>
                 </Form.Item>
               </form>
             </div>

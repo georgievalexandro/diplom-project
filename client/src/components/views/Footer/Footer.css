@@ -1,0 +1,27 @@
+.Footer {
+    height: 80px;
+    display: flex;
+    justify-content: space-around; 
+    font-size: 1rem;
+    align-items: center; 
+    flex-wrap: wrap;
+}
+.FooterCredits,
+.FooterRoutes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    height: inherit;
+    font-size: 1rem;
+    margin: 0 10px;
+}
+
+@media (max-width: 768px) {
+    .Footer {
+        padding: 0 40px;
+    }
+    .FooterRoutes {
+        order: -1;
+    }
+}

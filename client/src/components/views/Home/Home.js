@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import classes from './Home.module.css';
 import gameVideo from '../../../assets/videos/game.mp4';
 import movieVideo from '../../../assets/videos/movie.mp4';
-import { Button, Select, Input } from 'antd';
+import { Button, Select, Input, Icon } from 'antd';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { useSelector } from "react-redux";
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { USER_SERVER } from '../../Config';
 
-const { TextArea } = Input;
 const { Option } = Select;
 
 const OpinionSchema = Yup.object().shape({
@@ -30,22 +28,20 @@ const OpinionSchema = Yup.object().shape({
 const Home = props => {
     const user = useSelector(state => state.user);
     const [SelectState, setSelectState] = useState(null);
-    const [OpinionData, setOpinionData] = useState(null);
-    const [DeleteAccountMessage, setDeleteAccountMessage] = useState(null);
     const userId = localStorage.getItem('userId');
 
 
-    if(user.userData && user.userData.isAuth) {
-        console.log('Is logged in');
-    } else {
-        console.log('Not logged in');
-    }
+    // if(user.userData && user.userData.isAuth) {
+    //     console.log('Is logged in');
+    // } else {
+    //     console.log('Not logged in');
+    // }
 
     let form = null;
     if(SelectState === 'opinion') {
         form = (
             <div className={classes.OpinionFormContainer}>
-        	    <h1>Споделете мнението си с нас</h1>
+        	    <h1 style={{color: '#709abf'}}>Споделете мнението си с нас</h1>
                 <Formik
                     initialValues={{
                         firstName: '',
@@ -56,7 +52,6 @@ const Home = props => {
                     validationSchema={OpinionSchema}
                     onSubmit={values => {
                         // same shape as initial values
-                        setOpinionData(values);
                         const variable = {
                             firstName: values.firstName,
                             lastName: values.lastName,
@@ -95,22 +90,30 @@ const Home = props => {
     }else if(SelectState === 'deleteAccount') {
         form = (
             <div className={classes.DeleteAccountFormContainer}>
-        	    <h1 style={{margin: '30px 0 0 0'}}>Съжаляваме че ни напускате :(</h1>
+        	    <h1 style={{margin: '30px 0 0 0', color: '#709abf'}}>Съжаляваме че ни напускате <Icon type="frown" /></h1>
                 <Formik
                     initialValues={{
                         message: ''
                     }}
                     onSubmit={values => {
-                        setDeleteAccountMessage(values.message);
                         const variable = {
                             userEmail: user.userData.email,
                             userMessage: values.message || 'Няма съобщение'
                         }
                         // same shape as initial values
                         
+                        //Delete Account and everything related to it
                         axios.post('http://localhost:3000/api/sendmail/sendNotification', variable)
                         .then(response => {
                             console.log('Mail was sent');
+                        })
+                        axios.post('http://localhost:3000/api/favoritegame/deleteAllGameRecords', {userId})
+                        .then(response => {
+                            console.log('All game records for this user have been deleted');
+                        })
+                        axios.post('http://localhost:3000/api/favorite/deleteAllMovieRecords', {userId})
+                        .then(response => {
+                            console.log('All movie records for this user have been deleted');
                         })
                         // axios.post('http://localhost:3000/api/users/deleteAccount', {userId})
                         // .then(response => {
@@ -186,7 +189,7 @@ const Home = props => {
                 </AnchorLink>
             </div>
             <div className={[classes.Section, classes.SectionThree].join(' ')} id='sectionThree'>
-                <h3 style={{ textAlign: 'center', fontSize: '25px', fontWeight: '600'}}>Свържете се с нас</h3>
+                <h3 style={{ textAlign: 'center', fontSize: '30px', fontWeight: '600', color: '#709abf'}}>Свържете се с нас</h3>
                 <Select
                     className={classes.SelectSize}
                     allowClear

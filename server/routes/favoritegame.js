@@ -38,6 +38,14 @@ router.post("/removeFromFavorite", auth, (req, res) => {
         })
 });
 
+router.post("/deleteAllGameRecords", auth, (req, res) => {
+    FavoriteGame.deleteMany({userFrom: req.body.userId})
+        .exec((err, doc) => {
+            if (err) return res.status(400).json({success: false, err})
+            res.status(200).json({success: true, doc})
+        })
+});
+
 router.post("/getFavoriteGame", (req, res) => {
     FavoriteGame.find({'userFrom': req.body.userFrom})
         .exec((err, favorites) => {

@@ -1,0 +1,28 @@
+.GDPR {
+    width: 85%;
+    margin: 30px auto;
+}
+.DownloadGDPR {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 340px;
+    color: #5d89af;
+    border-color: #5d89af;
+    font-weight: 600;
+    font-size: 20px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .GDPR {
+        width: 75%;
+    }
+}
+@media (max-width: 500px) {
+    .DownloadGDPR {
+        width: 90%;
+    }
+}

@@ -6,6 +6,7 @@ import YouTube from '@u-wave/react-youtube';
 import MainImage from '../../LandingPage/Sections/MainImage';
 import GameCard from '../Sections/GameCard';
 import ToggleFavoriteButton from '../Sections/ToggleFavoriteButton';
+import TogglePlayLater from '../Sections/TogglePlayLater';
 
 const { Panel } = Collapse;
 const TAG_COLORS = {
@@ -75,11 +76,18 @@ function GameDetailPage(props) {
             }
 
             <div style={{width: '85%', margin: '3rem auto', boxShadow: '0px 0px 60px -40px rgba(0,0,0,0.5)'}}>
-                <ToggleFavoriteButton 
-                    userFrom={localStorage.getItem('userId')}
-                    gameId={gameId}
-                    gameInfo={Game}    
-                />
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <TogglePlayLater 
+                        userFrom={localStorage.getItem('userId')}
+                        gameId={gameId}
+                        gameInfo={Game}    
+                    />
+                    <ToggleFavoriteButton 
+                        userFrom={localStorage.getItem('userId')}
+                        gameId={gameId}
+                        gameInfo={Game}    
+                    />
+                </div>
                 <Collapse 
                     defaultActiveKey={['1']}
                     style={{fontSize: '16px', fontWeight: '600', background: '#ffffff', marginBottom: '30px'}}

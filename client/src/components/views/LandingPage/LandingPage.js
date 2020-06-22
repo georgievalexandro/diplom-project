@@ -48,11 +48,7 @@ function LandingPage() {
 
             {/* Body */}
             <div style={{width: '85%', margin: '1rem auto'}}>
-                <Breadcrumb separator=">" style={{textAlign: 'center', marginBottom: '50px'}}>
-                    <Breadcrumb.Item href="/">Начална страница</Breadcrumb.Item>
-                    <Breadcrumb.Item href="/movies">Филми</Breadcrumb.Item>
-                </Breadcrumb>
-                <Title level={2}>Популярни и предстоящи филми</Title>
+                <Title level={2} style={{color: '#709abf'}}>Популярни и предстоящи филми</Title>
                 {/* Grid card */}
                 <Row gutter={[16, 16]}>
                     {Movies && Movies.map((movie, index) => (
@@ -68,7 +64,7 @@ function LandingPage() {
                 {/* Load More Button */}
                 <br />
                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <Button type='ghost' size='large' onClick={loadMore}>Виж повече</Button>
+                    <Button style={{background: '#709abf', borderColor: '#709abf', color: '#ffffff'}} size='large' onClick={loadMore}>Виж повече</Button>
                 </div>
             </div>
 

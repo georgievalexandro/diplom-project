@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Modal } from 'antd';
+import { Button, Modal, notification } from 'antd';
 import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 
 const ToggleFavoriteButton = props => {
@@ -38,10 +38,19 @@ const ToggleFavoriteButton = props => {
                     }
                 })
         } else {
+            const visitFavorite = (<Button type='primary' href='/favorite-games' target='_blank'>Виж колекция</Button>);
             axios.post('http://localhost:3000/api/favoritegame/addToFavorite', variable)
                 .then(response => {
                     if(response.data.success){
                         setFavoritedNumber(!Favorited);
+                        notification.open({
+                            message: 'Успешно добавено в любими',
+                            description:
+                               visitFavorite,
+                            onClick: () => {
+                              console.log('Notification Clicked!');
+                            },
+                          });
                     } else {
                         Modal.info({
                             title: 'Моля влезте в профила си!',
@@ -58,13 +67,11 @@ const ToggleFavoriteButton = props => {
     }
     
     return (
-        <Button onClick={favoriteHandler} style={{display: 'block', marginLeft: 'auto', borderRadius: 0}}>
+        <Button onClick={favoriteHandler} style={{borderRadius: 0}}>
             {Favorited ? 
                 (<>Премахни <HeartFilled style={{color: 'red'}}/></>):
                 (<>Добави <HeartOutlined style={{color: 'red'}}/></>)}
         </Button>
-
-
     );
 }
 

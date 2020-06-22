@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Layout, Menu, Icon, Table, Tag, Button, Collapse  } from 'antd';
+import { Layout, Menu, Icon, Table, Tag, Button, Collapse, Descriptions, notification  } from 'antd';
 import CanvasJSReact from '../../../lib/canvasjs.react';
+import moment from 'moment';
 
 const CanvasJS = CanvasJSReact.CanvasJS;
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -16,6 +17,11 @@ const AdminPage = props => {
   const [FavoriteMovies, setFavoriteMovies] = useState([]);
   const [FavoriteGames, setFavoriteGames] = useState([]);
   const [UserOpinions, setUserOpinions] = useState([]);
+  const [MovieReminders, setMovieReminders] = useState([]);
+  const [GameReminders, setGameReminders] = useState([]);
+
+  //const currentDate = moment().format("YYYY-MM-DD");
+  const oneDayEarlier = moment().add(1, 'days').format("YYYY-MM-DD");
 
   const onCollapse = collapsed => {
     setCollapsed(collapsed);
@@ -30,7 +36,31 @@ const AdminPage = props => {
       fetchFavoriteMovies();
       fetchFavoriteGames();
       fetchOpinions();
+      fetchMovieReminders();
+      fetchGameReminders();
   }, [])
+
+  const fetchGameReminders = () => {
+    axios.post('http://localhost:3000/api/gamereminder/getGameReminders', {oneDayEarlier})
+        .then(response => {
+            if(response.data.success){
+                setGameReminders(response.data.gamereminders)
+            }else {
+                console.log('Failed to get game reminders');
+            }
+        })
+  }
+
+  const fetchMovieReminders = () => {
+    axios.post('http://localhost:3000/api/moviereminder/getMovieReminders', {oneDayEarlier})
+        .then(response => {
+            if(response.data.success){
+                setMovieReminders(response.data.moviereminders)
+            }else {
+                console.log('Failed to get movie reminders');
+            }
+        })
+  }
 
   const fetchOpinions = () => {
     axios.post('http://localhost:3000/api/useropinion/getOpinions')
@@ -281,13 +311,53 @@ const AdminPage = props => {
               if(response.data.success){
                   fetchUsers();
               }else {
-                  alert('Failed to make admin');
+                  alert('Failed to delete account');
               }
           })
   }
 
-  const responseHandler = (email) => {
-    console.log(email);
+  const movieNotificationHandler = (reminder) => {
+    const variable = {
+      userName: reminder.userName,
+      userEmail: reminder.userEmail,
+      movieTitle: reminder.movieTitle,
+      movieReleaseDate: reminder.movieReleaseDate
+    }
+    console.log(reminder);
+    axios.post('http://localhost:3000/api/sendmail/sendMovieReminder', variable)
+    .then(response => {
+      
+    });
+
+    notification.open({
+      message: 'Успешно напомняне!',
+      description: reminder.userName + ' беше успешно известен за премиерата на филма ' + reminder.movieTitle,
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+  });
+  }
+
+  const gameNotificationHandler = (reminder) => {
+    const variable = {
+      userName: reminder.userName,
+      userEmail: reminder.userEmail,
+      gameTitle: reminder.gameTitle,
+      gameReleaseDate: reminder.gameReleaseDate
+    }
+    console.log(reminder);
+    axios.post('http://localhost:3000/api/sendmail/sendGameReminder', variable)
+    .then(response => {
+      
+    });
+
+    notification.open({
+      message: 'Успешно напомняне!',
+      description: reminder.userName + ' беше успешно известен за новата игра ' + reminder.gameTitle,
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+  });
   }
 
     let content = '';
@@ -298,17 +368,46 @@ const AdminPage = props => {
           {UserOpinions && UserOpinions.map((opinion, index) => {
             return <Panel header={[opinion.firstName, ' ', opinion.lastName, ' ', <Tag color="green">{opinion.email}</Tag>]} key={opinion._id}>
                 <p>{opinion.message}</p>
-                <form>
-                  <textarea name='response'> </textarea>
-                </form>
-                <button type='primary' onClick={()=>responseHandler(opinion.email)} >Отговори</button>
+                <Button href={`mailto:${opinion.email}?subject=Благодарим ви за съдействието`} type='primary'>Отговори</Button>
               </Panel>
           })}
         </Collapse>
       );
     }
     else if(currentKey == 4) {
-      content = (<h1>Съобщения</h1>);
+      content = (
+        <>
+          <div>
+          <h2 style={{color: '#709abf', fontSize: '25px'}}>Филми</h2>
+            {MovieReminders.map(reminder => {
+              return <Descriptions key={reminder._id} style={{border: '1.5px solid #709abf', padding: '10px', borderRadius: '5px'}}>
+                <Descriptions.Item label="Име на потребител">{reminder.userName}</Descriptions.Item>
+                <Descriptions.Item label="Имейл">{reminder.userEmail}</Descriptions.Item>
+                <Descriptions.Item label="Заглавие на филма">{reminder.movieTitle}</Descriptions.Item>
+                <Descriptions.Item label="Дата на премиерата">{reminder.movieReleaseDate}</Descriptions.Item>
+                <Descriptions.Item>
+                  <Button onClick={() => movieNotificationHandler(reminder)} type='primary'>Напомни <Icon type="bell" theme="filled" style={{color: 'red'}}/></Button>
+                </Descriptions.Item>
+              </Descriptions>
+            })}
+          </div>
+          
+          <div>
+          <h2 style={{color: '#709abf', fontSize: '25px'}}>Игри</h2>
+          {GameReminders.map(reminder => {
+            return <Descriptions key={reminder._id} style={{border: '1.5px solid #709abf', padding: '10px', borderRadius: '5px'}}>
+              <Descriptions.Item label="Име на потребител">{reminder.userName}</Descriptions.Item>
+              <Descriptions.Item label="Имейл">{reminder.userEmail}</Descriptions.Item>
+              <Descriptions.Item label="Заглавие на играта">{reminder.gameTitle}</Descriptions.Item>
+              <Descriptions.Item label="Дата на премиерата">{reminder.gameReleaseDate}</Descriptions.Item>
+              <Descriptions.Item>
+                <Button onClick={()=>gameNotificationHandler(reminder)} type='primary'>Напомни <Icon type="bell" theme="filled" style={{color: 'red'}}/></Button>
+              </Descriptions.Item>
+            </Descriptions>
+            })}
+          </div>
+        </>
+      );
     }
     else if(currentKey == 3) {
       content = (
@@ -367,12 +466,12 @@ const AdminPage = props => {
                 </span>
               }
             >
-              <Menu.Item key="4"><Icon type="message" /> Съобщения</Menu.Item>
+              <Menu.Item key="4"><Icon type="bell" /> Напомняния</Menu.Item>
               <Menu.Item key="5"><Icon type="wechat" /> Мнения</Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>
-        <Layout style={{overflowX: 'unset'}}>
+        <Layout style={{overflowX: 'unset', background: '#ffffff'}}>
           <Content style={{ margin: '50px 16px 0 16px' }}>
             {content}
           </Content>

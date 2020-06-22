@@ -17,6 +17,9 @@ import FavoriteGamePage from "./views/GamesPage/FavoriteGamePage/FavoriteGamePag
 import AdminPage from "./views/Admin/AdminPage";
 import WatchMovieLaterPage from './views/WatchMovieLaterPage/WatchMovieLaterPage';
 import GamesPage from './views/GamesPage/GamesPage';
+import NotFound from './views/NotFound/NotFound';
+import GDPR from './views/GDPR/GDPR';
+import PlayLaterPage from './views/GamesPage/PlayLaterPage/PlayLaterPage';
 
 //null   Anyone Can go inside
 //true   only logged in user can go inside
@@ -28,7 +31,7 @@ function App() {
     width: 40,
     lineHeight: '40px',
     borderRadius: 4,
-    backgroundColor: '#1088e9',
+    backgroundColor: '#709abf',
     color: '#fff',
     textAlign: 'center',
     fontSize: 14,
@@ -49,7 +52,10 @@ function App() {
           <Route exact path="/favorite-movies" component={Auth(FavoriteMoviePage, true)} />
           <Route exact path="/favorite-games" component={Auth(FavoriteGamePage, true)} />
           <Route exact path="/watchlater-movies" component={Auth(WatchMovieLaterPage, true)} />
+          <Route exact path="/playlater-games" component={Auth(PlayLaterPage, true)} />
           <Route exact path="/admin" component={Auth(AdminPage, true, true)} />
+          <Route exact path="/gdpr" component={Auth(GDPR, null)} />
+          <Route component={Auth(NotFound, null)} />
         </Switch>
       </div>
       <BackTop>

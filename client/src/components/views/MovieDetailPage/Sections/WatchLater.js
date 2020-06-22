@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Modal } from 'antd';
+import { Button, Modal, notification } from 'antd';
 import { PlayCircleFilled, PlayCircleOutlined } from '@ant-design/icons';
 
 const WatchLater = props => {
@@ -48,11 +48,20 @@ const WatchLater = props => {
                     }
                 })
         } else {
+            const visitPlay = (<Button type='primary' href='/watchlater-movies' target='_blank'>Виж колекция</Button>);
             axios.post('http://localhost:3000/api/watchlater/addToWatchLater', variable)
                 .then(response => {
                     if(response.data.success){
                         setWatchLaterNumber(WatchLaterNumber + 1);
                         setToWatchLaterNumber(!ToWatchLater);
+                        notification.open({
+                            message: 'Успешно добавено за гледане по-късно',
+                            description:
+                               visitPlay,
+                            onClick: () => {
+                              console.log('Notification Clicked!');
+                            },
+                        });
                     } else {
                         Modal.info({
                             title: 'Моля влезте в профила си!',

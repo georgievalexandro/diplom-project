@@ -53,7 +53,7 @@ const WatchMovieLaterPage = props => {
             if(response.data.success) {
                 console.log('Reminder Removed');
             }else{
-                alert('Failed to remove from favorites')
+                alert('Failed to remove reminder')
             }
         })
     }
@@ -79,12 +79,6 @@ const WatchMovieLaterPage = props => {
             onOk() {
                 setReminderButtonColor('#0d8e33');
                 setReminderButtonText('checked');
-
-
-                //TODO 
-                //Logic for storing reminder in db and sending email reminder
-
-                console.log(data);
 
                 axios.post('http://localhost:3000/api/moviereminder/addMovieReminder', data)
                 .then(response => {

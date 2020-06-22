@@ -61,6 +61,11 @@
 .menu_drawer .ant-drawer-header {
   padding: 14px 24px !important;
 }
+.NavUsername {
+  color: #709abf;
+  font-size: 18px;
+  font-weight: 600;
+}
 
 @media (max-width: 767px) {
   .NavUsername {

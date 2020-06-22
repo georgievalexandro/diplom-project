@@ -25,10 +25,10 @@ function RightMenu(props) {
     return (
       <Menu mode={props.mode}>
         <Menu.Item key="mail">
-          <a href="/login" style={{fontSize: '18px'}}>Вход</a>
+          <a href="/login" style={{fontSize: '18px', color: '#709abf'}}>Вход</a>
         </Menu.Item>
         <Menu.Item key="app">
-          <a href="/register" style={{fontSize: '18px'}}>Регистрация</a>
+          <a href="/register" style={{fontSize: '18px', color: '#709abf'}}>Регистрация</a>
         </Menu.Item>
       </Menu>
     )
@@ -39,7 +39,7 @@ function RightMenu(props) {
           user.userData ? <div className='NavUsername'>Здравей {user.userData.name}</div> : null}
         <Menu mode={props.mode}>
           <Menu.Item key="logout">
-            <a onClick={logoutHandler}><LogoutOutlined style={{fontSize: '20px'}}/> Изход</a>
+            <a style={{color: '#709abf'}} onClick={logoutHandler}><LogoutOutlined style={{fontSize: '20px', color: '#709abf'}}/> Изход</a>
           </Menu.Item>
         </Menu>
       </div>

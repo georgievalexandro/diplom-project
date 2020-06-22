@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Modal } from 'antd';
+import { Button, Modal, notification } from 'antd';
 import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 
 const Favorite = props => {
@@ -44,10 +44,19 @@ const Favorite = props => {
                     }
                 })
         } else {
+            const visitFavorite = (<Button type='primary' href='/favorite-movies' target='_blank'>Виж колекция</Button>);
             axios.post('http://localhost:3000/api/favorite/addToFavorite', variable)
                 .then(response => {
                     if(response.data.success){
                         setFavoritedNumber(!Favorited);
+                        notification.open({
+                            message: 'Успешно добавено в любими',
+                            description:
+                               visitFavorite,
+                            onClick: () => {
+                              console.log('Notification Clicked!');
+                            },
+                          });
                     } else {
                         Modal.info({
                             title: 'Моля влезте в профила си!',

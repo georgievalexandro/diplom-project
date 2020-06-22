@@ -99,12 +99,10 @@ function RegisterPage(props) {
           values,
           touched,
           errors,
-          dirty,
           isSubmitting,
           handleChange,
           handleBlur,
           handleSubmit,
-          handleReset,
         } = props;
         return (
           <div className="app">
@@ -113,7 +111,7 @@ function RegisterPage(props) {
               borderRadius: '5px',
               padding: '20px'
             }}>
-              <h2 style={{textAlign: 'center'}}>Регистрация</h2>
+              <h2 style={{textAlign: 'center', color: '#709abf', fontSize: '30px'}}>Регистрация</h2>
               <Form labelAlign='left' style={{ minWidth: '375px' }} {...formItemLayout} onSubmit={handleSubmit} >
 
                 <Form.Item required label="Име">
@@ -202,7 +200,7 @@ function RegisterPage(props) {
                 </Form.Item>
 
                 <Form.Item {...tailFormItemLayout}>
-                  <Button onClick={handleSubmit} type="primary" block disabled={isSubmitting}>
+                  <Button style={{background: '#709abf', borderColor: '#709abf'}} onClick={handleSubmit} type="primary" block disabled={isSubmitting}>
                     Изпрати
                   </Button>
                 </Form.Item>
