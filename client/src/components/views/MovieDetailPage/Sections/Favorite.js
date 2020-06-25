@@ -23,7 +23,7 @@ const Favorite = props => {
     
     
     useEffect(() => {
-        axios.post('http://localhost:3000/api/favorite/favorited', variable)
+        axios.post('/api/favorite/favorited', variable)
         .then(response => {
             if(response.data.success){
                 setFavoritedNumber(response.data.favorited);
@@ -35,7 +35,7 @@ const Favorite = props => {
 
     const favoriteHandler = () => {
         if(Favorited) {
-            axios.post('http://localhost:3000/api/favorite/removeFromFavorite', variable)
+            axios.post('/api/favorite/removeFromFavorite', variable)
                 .then(response => {
                     if(response.data.success){
                         setFavoritedNumber(!Favorited);
@@ -45,7 +45,7 @@ const Favorite = props => {
                 })
         } else {
             const visitFavorite = (<Button type='primary' href='/favorite-movies' target='_blank'>Виж колекция</Button>);
-            axios.post('http://localhost:3000/api/favorite/addToFavorite', variable)
+            axios.post('/api/favorite/addToFavorite', variable)
                 .then(response => {
                     if(response.data.success){
                         setFavoritedNumber(!Favorited);

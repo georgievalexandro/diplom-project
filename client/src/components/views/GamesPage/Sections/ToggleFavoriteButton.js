@@ -17,7 +17,7 @@ const ToggleFavoriteButton = props => {
     }
     
     useEffect(() => {
-        axios.post('http://localhost:3000/api/favoritegame/favorited', variable)
+        axios.post('/api/favoritegame/favorited', variable)
         .then(response => {
             if(response.data.success){
                 setFavoritedNumber(response.data.favorited);
@@ -29,7 +29,7 @@ const ToggleFavoriteButton = props => {
 
     const favoriteHandler = () => {
         if(Favorited) {
-            axios.post('http://localhost:3000/api/favoritegame/removeFromFavorite', variable)
+            axios.post('/api/favoritegame/removeFromFavorite', variable)
                 .then(response => {
                     if(response.data.success){
                         setFavoritedNumber(!Favorited);
@@ -39,7 +39,7 @@ const ToggleFavoriteButton = props => {
                 })
         } else {
             const visitFavorite = (<Button type='primary' href='/favorite-games' target='_blank'>Виж колекция</Button>);
-            axios.post('http://localhost:3000/api/favoritegame/addToFavorite', variable)
+            axios.post('/api/favoritegame/addToFavorite', variable)
                 .then(response => {
                     if(response.data.success){
                         setFavoritedNumber(!Favorited);

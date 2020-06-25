@@ -17,7 +17,7 @@ const WatchLater = props => {
     
     useEffect(() => {
 
-        axios.post('http://localhost:3000/api/watchlater/watchLaterNumber', variable)
+        axios.post('/api/watchlater/watchLaterNumber', variable)
             .then(response => {
                 if(response.data.success){
                     setWatchLaterNumber(response.data.watchLaterNumber);
@@ -26,7 +26,7 @@ const WatchLater = props => {
                 }
             })
 
-        axios.post('http://localhost:3000/api/watchlater/towatchlater', variable)
+        axios.post('/api/watchlater/towatchlater', variable)
         .then(response => {
             if(response.data.success){
                 setWatchLaterNumber(response.data.towatchlater);
@@ -38,7 +38,7 @@ const WatchLater = props => {
 
     const watchLaterHandler = () => {
         if(ToWatchLater) {
-            axios.post('http://localhost:3000/api/watchlater/removeFromWatchLater', variable)
+            axios.post('/api/watchlater/removeFromWatchLater', variable)
                 .then(response => {
                     if(response.data.success){
                         setWatchLaterNumber(WatchLaterNumber - 1);
@@ -49,7 +49,7 @@ const WatchLater = props => {
                 })
         } else {
             const visitPlay = (<Button type='primary' href='/watchlater-movies' target='_blank'>Виж колекция</Button>);
-            axios.post('http://localhost:3000/api/watchlater/addToWatchLater', variable)
+            axios.post('/api/watchlater/addToWatchLater', variable)
                 .then(response => {
                     if(response.data.success){
                         setWatchLaterNumber(WatchLaterNumber + 1);

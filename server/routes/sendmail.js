@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const mailgun = require("mailgun-js");
-const DOMAIN = 'YOUR_DOMAIN';
-const API_KEY = 'YOUR_API_KEY';
+const DOMAIN = 'sandboxe5294d5c1b3c44f0a3a3ff4435211fef.mailgun.org';
+const API_KEY = '72609374f9efbbcfb475f69d843d9c90-1b6eb03d-b4162b31';
 const mg = mailgun({apiKey: API_KEY, domain: DOMAIN});
 
 const { auth } = require("../middleware/auth");
@@ -11,7 +11,7 @@ const { auth } = require("../middleware/auth");
 router.post("/sendNotification", auth, (req, res) => {
     const data = {
         from: `${req.body.userEmail}`,
-        to: 'YOUR_MAIL',
+        to: 'georgievalexandro@gmail.com',
         subject: 'Изтриване на акаунт',
         text: `${req.body.userMessage}`
     };
